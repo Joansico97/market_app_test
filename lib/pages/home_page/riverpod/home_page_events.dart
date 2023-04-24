@@ -24,13 +24,18 @@ class HomePageEvents extends StateNotifier<HomePageModel> {
   void changeSearch({
     required String text,
   }) {
-    state = HomePageModel.fromJson(state.toJson());
-    state.productSearchList = [];
-    for (var element in state.productsList!) {
-      if (element.title!.contains(text)) {
-        state.productSearchList!.add(element);
+    if (text.isNotEmpty) {
+      state = HomePageModel.fromJson(state.toJson());
+      final List<ProductModel> productSearchList = [];
+      for (var element in state.productsList!) {
+        if (element.title!.contains(text)) {
+          productSearchList.add(element);
+        }
       }
+      state.productSearchList = List<ProductModel>.from(productSearchList);
+      state = HomePageModel.fromJson(state.toJson());
+    } else {
+      getAllProducts();
     }
-    state = HomePageModel.fromJson(state.toJson());
   }
 }
